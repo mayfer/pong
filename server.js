@@ -5,15 +5,20 @@ var io = require('socket.io')(http);
 var path = require('path');
 
 app.get('/', function(req, res){
-  res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+    console.log('user connected', socket.id);
+
+    socket.on('cursor', function(msg){
+    });
 });
 
 http.listen(3000, function(){
-  console.log('listening on *:3000');
+    console.log('listening on *:3000');
 });
 app.use(express.static(__dirname));
+
+
 

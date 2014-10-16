@@ -12,13 +12,13 @@
             $(document).ready(function(){
                 var $canvas = Canvas($('#container'));
                 var context = $canvas.get(0).getContext("2d");
+                var socket = io();
 
-                var pong = Pong(context).init();
+                var pong = Pong(context, socket).init();
 
                 pong.render();
 
 
-                var socket = io();
             });
 		</script>
 		<style>
@@ -32,17 +32,14 @@
                 background: #777;
 			}
             #container {
-                margin: 100px auto;
-                width: 800px;
+                margin: auto;
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                width: 600px;
                 height: 400px;
                 outline: 3px solid #fff;
                 background: #000;
             }
-			#canvas {
-				display: block;
-                width: 100%;
-                height: 100%;
-			}
 		</style>
 	</head>
 	<body>
