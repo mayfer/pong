@@ -1,0 +1,23 @@
+{
+  "name": "pong",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mayfer/pong.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/mayfer/pong/issues"
+  },
+  "dependencies": {
+    "socket.io": "~1.1.0",
+    "express": "~4.9.7"
+  }
+}
