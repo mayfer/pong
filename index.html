@@ -6,15 +6,20 @@
 		<script src="/canvas.js"></script>
 		<script src="/animframe.js"></script>
 		<script src="/pong.js"></script>
+		<script src="/network.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         
 		<script>
             $(document).ready(function(){
                 var $canvas = Canvas($('#container'));
                 var context = $canvas.get(0).getContext("2d");
-                var socket = io();
 
-                var pong = Pong(context, socket).init();
+                var $cursors_canvas = Canvas($('#cursors-overlay'));
+                var cursors_context = $cursors_canvas.get(0).getContext("2d");
+
+                var network = Network();
+                var pong = Pong(context, network.socket, cursors_context).init();
+                network.game = pong;
 
                 pong.render();
 
@@ -40,10 +45,17 @@
                 outline: 3px solid #fff;
                 background: #000;
             }
+            #cursors-overlay {
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                pointer-events: none;
+            }
 		</style>
 	</head>
 	<body>
         <div id="container">
+        </div>
+        <div id="cursors-overlay">
         </div>
         <script type="text/javascript">
 

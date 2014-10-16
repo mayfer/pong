@@ -8,10 +8,26 @@ app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+var cursors = {};
+
+setInterval(function(){
+    var _cursors = new Array;
+    for(var o in cursors) {
+        _cursors.push(cursors[o]);
+    }
+    io.sockets.emit('cursors', _cursors);
+}, 20);
+
 io.on('connection', function(socket){
-    console.log('user connected', socket.id);
+    console.log('connected', socket.id);
 
     socket.on('cursor', function(msg){
+        cursors[socket.id] = {y: msg.y, x: msg.x};
+    });
+
+    socket.on('disconnect', function () {
+        console.log('disconnected', socket.id);
+        delete cursors[socket.id];
     });
 });
 
