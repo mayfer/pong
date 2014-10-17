@@ -13,7 +13,7 @@ function Pong(context, socket, cursors_context) {
 
     pong.midline_width = 4;
 
-    pong.cursors = [];
+    pong.teams = {left: {}, right: {}};
 
     pong.ball = {
         x: pong.context.width/2,
@@ -84,17 +84,24 @@ function Pong(context, socket, cursors_context) {
 
         var cctx = pong.cursors_context;
         cctx.clearRect(0, 0, cctx.width, cctx.height);
-        for(i in pong.cursors) {
-            var o = pong.canvas_offset;
-            var c = pong.cursors[i];
+        var o = pong.canvas_offset;
+
+        cctx.fillStyle = "#ff0000";
+        for(i in pong.teams.left) {
+            var c = pong.teams.left[i];
+            cctx.fillRect(o.left + c.x, o.top + c.y, 5, 5);
+        }
+        cctx.fillStyle = "#00ff00";
+        for(i in pong.teams.right) {
+            var c = pong.teams.right[i];
             cctx.fillRect(o.left + c.x, o.top + c.y, 5, 5);
         }
 
         window.requestAnimFrame(pong.render);
     }
 
-    pong.set_cursors = function(cursors) {
-        pong.cursors = cursors;
+    pong.set_teams = function(teams) {
+        pong.teams = teams;
     };
     pong.set_paddles = function(paddles) {
         pong.paddle_left = paddles.left;

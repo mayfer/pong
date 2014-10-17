@@ -7,8 +7,8 @@ function Network() {
     net.socket.on('paddles', function(msg){
         net.game.set_paddles(msg);
     });
-    net.socket.on('cursors', function(msg){
-        net.game.set_cursors(msg);
+    net.socket.on('teams', function(msg){
+        net.game.set_teams(msg);
     });
 
     return this;
