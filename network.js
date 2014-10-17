@@ -10,6 +10,9 @@ function Network() {
     net.socket.on('teams', function(msg){
         net.game.set_teams(msg);
     });
+    net.socket.on('ball', function(msg){
+        net.game.set_ball(msg);
+    });
 
     return this;
 }

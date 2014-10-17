@@ -15,14 +15,6 @@ function Pong(context, socket, cursors_context) {
 
     pong.teams = {left: {}, right: {}};
 
-    pong.ball = {
-        x: pong.context.width/2,
-        y: pong.context.height/2,
-        dx: 80,
-        dy: 80,
-        size: 10,
-        half: 5,
-    }
 
     var calc_offset = function(e){
         pong.canvas_offset = $('#container').offset();
@@ -41,6 +33,7 @@ function Pong(context, socket, cursors_context) {
 
             pong.socket.emit('cursor', {y: y, x: x});
         });
+        pong.reset_ball();
 
         return pong;
     }
@@ -49,14 +42,19 @@ function Pong(context, socket, cursors_context) {
         pong.ball = {
             x: pong.context.width/2,
             y: pong.context.height/2,
-            dx: 80,
-            dy: 80,
+            dx: 120,
+            dy: 120,
             size: 10,
             half: 5,
         }
     }
 
     pong.draw_ball = function() {
+        var ctx = pong.context;
+        ctx.fillRect(pong.ball.x - (pong.ball.size/2), pong.ball.y - (pong.ball.size/2), pong.ball.size, pong.ball.size);
+    }
+
+    pong.calculate_and_draw_ball = function() {
         var ctx = pong.context;
         ctx.fillRect(pong.ball.x - (pong.ball.size/2), pong.ball.y - (pong.ball.size/2), pong.ball.size, pong.ball.size);
 
@@ -67,7 +65,7 @@ function Pong(context, socket, cursors_context) {
             bottom: pong.context.height,
         }
 
-        if(pong.ball.x - pong.ball.half <= boundary.left) {
+        if(pong.ball.x - pong.ball.half < boundary.left) {
             if(pong.ball.y - pong.ball.half > pong.paddle_left - pong.paddle_height/2
             && pong.ball.y + pong.ball.half < pong.paddle_left + pong.paddle_height/2) {
                 pong.ball.dx = -pong.ball.dx;
@@ -76,7 +74,7 @@ function Pong(context, socket, cursors_context) {
                 pong.reset_ball();
             }
         }
-        if(pong.ball.x + pong.ball.half >= boundary.right) {
+        if(pong.ball.x + pong.ball.half > boundary.right) {
             if(pong.ball.y - pong.ball.half > pong.paddle_right - pong.paddle_height/2
             && pong.ball.y + pong.ball.half < pong.paddle_right + pong.paddle_height/2) {
                 pong.ball.dx = -pong.ball.dx;
@@ -85,7 +83,7 @@ function Pong(context, socket, cursors_context) {
                 pong.reset_ball();
             }
         }
-        if(pong.ball.y - pong.ball.half <= boundary.top || pong.ball.y + pong.ball.half >= boundary.bottom) {
+        if(pong.ball.y - pong.ball.half < boundary.top || pong.ball.y + pong.ball.half > boundary.bottom) {
             pong.ball.dy = -pong.ball.dy;
         }
 
@@ -126,6 +124,9 @@ function Pong(context, socket, cursors_context) {
         window.requestAnimFrame(pong.render);
     }
 
+    pong.set_ball = function(ball) {
+        pong.ball = ball;
+    };
     pong.set_teams = function(teams) {
         pong.teams = teams;
     };
