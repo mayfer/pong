@@ -42,8 +42,8 @@ function Pong(context, socket, cursors_context) {
         pong.ball = {
             x: pong.context.width/2,
             y: pong.context.height/2,
-            dx: 120,
-            dy: 120,
+            dx: 200,
+            dy: 200,
             size: 10,
             half: 5,
         }
@@ -54,10 +54,8 @@ function Pong(context, socket, cursors_context) {
         ctx.fillRect(pong.ball.x - (pong.ball.size/2), pong.ball.y - (pong.ball.size/2), pong.ball.size, pong.ball.size);
     }
 
-    pong.calculate_and_draw_ball = function() {
+    pong.predict_ball = function() {
         var ctx = pong.context;
-        ctx.fillRect(pong.ball.x - (pong.ball.size/2), pong.ball.y - (pong.ball.size/2), pong.ball.size, pong.ball.size);
-
         var boundary = {
             left: pong.padding + pong.paddle_width,
             right: pong.context.width - pong.padding - pong.paddle_width,
@@ -104,6 +102,7 @@ function Pong(context, socket, cursors_context) {
         ctx.fillRect(pong.padding, pong.paddle_left - (pong.paddle_height/2), pong.paddle_width, pong.paddle_height);
         ctx.fillRect(ctx.width - pong.padding - pong.paddle_width, pong.paddle_right - (pong.paddle_height/2), pong.paddle_width, pong.paddle_height);
 
+        pong.predict_ball();
         pong.draw_ball();
 
         var cctx = pong.cursors_context;

@@ -29,8 +29,8 @@ var pong = function() {
         pong.ball = {
             x: pong.context.width/2,
             y: pong.context.height/2,
-            dx: 120,
-            dy: 120,
+            dx: 200,
+            dy: 200,
             size: 10,
             half: 5,
         }
@@ -50,7 +50,7 @@ var pong = function() {
         if(pong.ball.x - pong.ball.half < boundary.left) {
             if(pong.ball.y - pong.ball.half > pong.paddle_left - pong.paddle_height/2
             && pong.ball.y + pong.ball.half < pong.paddle_left + pong.paddle_height/2) {
-                pong.ball.dx = -pong.ball.dx;
+                pong.ball.dx = Math.abs(pong.ball.dx);
             }
             if(pong.ball.x < 0) {
                 pong.reset_ball();
@@ -59,7 +59,7 @@ var pong = function() {
         if(pong.ball.x + pong.ball.half > boundary.right) {
             if(pong.ball.y - pong.ball.half > pong.paddle_right - pong.paddle_height/2
             && pong.ball.y + pong.ball.half < pong.paddle_right + pong.paddle_height/2) {
-                pong.ball.dx = -pong.ball.dx;
+                pong.ball.dx = -Math.abs(pong.ball.dx);
             }
             if(pong.ball.x > ctx.width) {
                 pong.reset_ball();
@@ -69,8 +69,8 @@ var pong = function() {
             pong.ball.dy = -pong.ball.dy;
         }
 
-        pong.ball.x += pong.ball.dx/60;
-        pong.ball.y += pong.ball.dy/60;
+        pong.ball.x += pong.ball.dx/20;
+        pong.ball.y += pong.ball.dy/20;
 
     }
     
