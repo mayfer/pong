@@ -8,7 +8,7 @@
         width: 600,
     }
 
-    pong.paddle = {
+    pong.paddles = {
         left: 0,
         right: 120,
         width: 10,
@@ -45,15 +45,15 @@
         var s = pong.settings;
 
         var boundary = {
-            left: pong.padding + pong.paddle.width,
-            right: pong.settings.width - pong.padding - pong.paddle.width,
+            left: pong.padding + pong.paddles.width,
+            right: pong.settings.width - pong.padding - pong.paddles.width,
             top: 0,
             bottom: pong.settings.height,
         }
 
         if(pong.ball.x - pong.ball.half < boundary.left) {
-            if(pong.ball.y - pong.ball.half > pong.paddle.left - pong.paddle.height/2
-            && pong.ball.y + pong.ball.half < pong.paddle.left + pong.paddle.height/2) {
+            if(pong.ball.y - pong.ball.half > pong.paddles.left - pong.paddles.height/2
+            && pong.ball.y + pong.ball.half < pong.paddles.left + pong.paddles.height/2) {
                 pong.ball.dx = Math.abs(pong.ball.dx);
             }
             if(pong.ball.x < 0) {
@@ -61,8 +61,8 @@
             }
         }
         if(pong.ball.x + pong.ball.half > boundary.right) {
-            if(pong.ball.y - pong.ball.half > pong.paddle.right - pong.paddle.height/2
-            && pong.ball.y + pong.ball.half < pong.paddle.right + pong.paddle.height/2) {
+            if(pong.ball.y - pong.ball.half > pong.paddles.right - pong.paddles.height/2
+            && pong.ball.y + pong.ball.half < pong.paddles.right + pong.paddles.height/2) {
                 pong.ball.dx = -Math.abs(pong.ball.dx);
             }
             if(pong.ball.x > s.width) {

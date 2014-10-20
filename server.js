@@ -12,13 +12,14 @@ app.get('/', function(req, res){
 setInterval(function(){
     pong.calculate_ball();
 }, 1000/60);
+
 setInterval(function(){
     io.sockets.emit('ball', pong.ball);
 }, 1000);
 
 setInterval(function(){
     io.sockets.emit('teams', pong.teams);
-}, 150);
+}, 50);
 
 setInterval(function(){
     var y_left_total = 0;
@@ -39,8 +40,11 @@ setInterval(function(){
         right: parseInt(y_right_total/y_right_count),
     }
 
-    pong.paddle.left = paddles.left;
-    pong.paddle.right = paddles.right;
+    paddles.left = Math.max(Math.min(paddles.left, pong.settings.height), 0);
+    paddles.right = Math.max(Math.min(paddles.right, pong.settings.height), 0);
+
+    pong.paddles.left = paddles.left;
+    pong.paddles.right = paddles.right;
 
     io.sockets.emit('paddles', paddles);
 }, 50);
