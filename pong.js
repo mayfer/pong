@@ -1,4 +1,5 @@
 (function(pong){
+    pong.last_timestamp = Date.now();
 
     pong.padding = 10;
     pong.midline_width = 4;
@@ -31,6 +32,7 @@
     };
 
     pong.reset_ball = function() {
+        pong.last_timestamp = Date.now();
         pong.ball = {
             x: pong.settings.width/2,
             y: pong.settings.height/2,
@@ -73,8 +75,14 @@
             pong.ball.dy = -pong.ball.dy;
         }
 
-        pong.ball.x += pong.ball.dx;
-        pong.ball.y += pong.ball.dy;
+        var current_timestamp = Date.now();
+        var diff = (current_timestamp - pong.last_timestamp) / 50;
+
+        pong.ball.x += (pong.ball.dx * diff);
+        pong.ball.y += (pong.ball.dy * diff);
+
+        pong.last_timestamp = current_timestamp;
+
     }
 
 })(typeof pong === 'undefined'? this['pong']={}: pong);

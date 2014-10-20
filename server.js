@@ -11,7 +11,7 @@ app.get('/', function(req, res){
 
 setInterval(function(){
     pong.calculate_ball();
-}, 1000/60);
+}, 50);
 
 setInterval(function(){
     io.sockets.emit('ball', pong.ball);

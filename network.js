@@ -11,6 +11,8 @@ function Network() {
         net.game.set_teams(msg);
     });
     net.socket.on('ball', function(msg){
+        //console.log('ball', msg);
+        net.game.last_timestamp = Date.now();
         net.game.set_ball(msg);
     });
 
