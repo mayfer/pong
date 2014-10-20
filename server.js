@@ -51,7 +51,7 @@ setInterval(function(){
 
 io.on('connection', function(socket){
     socket.public_id = hash(socket.id);
-    console.log('connected', socket.id, socket.public_id);
+    // console.log('connected', socket.id, socket.public_id);
 
     var team = Math.random() < 0.5;
 
