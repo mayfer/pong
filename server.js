@@ -70,7 +70,7 @@ io.on('connection', function(socket){
     });
 });
 
-http.listen(3000, function(){
+http.listen(8002, function(){
     console.log('listening on *:3000');
 });
 app.use(express.static(__dirname));
