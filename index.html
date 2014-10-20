@@ -1,16 +1,16 @@
 <!doctype html>
 <html>
-	<head>
-		<title>pong</title>
+    <head>
+        <title>pong</title>
         <script src='jquery-1.11.1.min.js'></script>
-        <script src="socket.io/socket.io.js"></script>
-		<script src="canvas.js"></script>
-		<script src="animframe.js"></script>
-		<script src="pong.js"></script>
-		<script src="client.js"></script>
-		<script src="network.js"></script>
+        <script src="socket.io.js"></script>
+        <script src="canvas.js"></script>
+        <script src="animframe.js"></script>
+        <script src="pong.js"></script>
+        <script src="client.js"></script>
+        <script src="network.js"></script>
         
-		<script>
+        <script>
             $(document).ready(function(){
                 var $canvas = Canvas($('#container'));
                 var context = $canvas.get(0).getContext("2d");
@@ -24,10 +24,10 @@
 
                 game.render();
             });
-		</script>
-		<style>
-			* { margin: 0; padding: 0; }
-			html, body { width: 100%; height: 100%; background: #777; }
+        </script>
+        <style>
+            * { margin: 0; padding: 0; }
+            html, body { width: 100%; height: 100%; background: #777; }
 
             #container {
                 margin: auto;
@@ -43,9 +43,9 @@
                 top: 0; left: 0; right: 0; bottom: 0;
                 pointer-events: none;
             }
-		</style>
-	</head>
-	<body>
+        </style>
+    </head>
+    <body>
         <div id="container">
         </div>
         <div id="cursors-overlay">
@@ -64,5 +64,5 @@
           })();
 
         </script>
-	</body>
+    </body>
 </html>
