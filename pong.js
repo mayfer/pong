@@ -77,4 +77,4 @@
         pong.ball.y += pong.ball.dy;
     }
 
-})(typeof pong === 'undefined'? this['mymodule']={}: pong);
+})(typeof pong === 'undefined'? this['pong']={}: pong);

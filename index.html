@@ -6,6 +6,7 @@
         <script src="/socket.io/socket.io.js"></script>
 		<script src="/canvas.js"></script>
 		<script src="/animframe.js"></script>
+		<script src="/pong.js"></script>
 		<script src="/client.js"></script>
 		<script src="/network.js"></script>
         
@@ -18,7 +19,7 @@
                 var cursors_context = $cursors_canvas.get(0).getContext("2d");
 
                 var network = Network();
-                var game = PongClient(context, network.socket, cursors_context).init();
+                var game = PongClient(context, pong, network.socket, cursors_context).init();
                 network.game = game;
 
                 game.render();

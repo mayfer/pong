@@ -1,5 +1,5 @@
-function PongClient(context, socket, cursors_context) {
-    var pong = this;
+function PongClient(context, pong, socket, cursors_context) {
+    var pc = this;
     pc.context = context;
     pc.cursors_context = cursors_context;
     pc.socket = socket;
@@ -21,19 +21,19 @@ function PongClient(context, socket, cursors_context) {
 
             pc.socket.emit('cursor', {y: y, x: x});
         });
-        pc.reset_ball();
+        pong.reset_ball();
 
-        return pong;
+        return pc;
     }
 
 
     pc.draw_ball = function() {
         var ctx = pc.context;
         ctx.fillRect(
-            pc.ball.x - (pc.ball.size/2),
-            pc.ball.y - (pc.ball.size/2),
-            pc.ball.size,
-            pc.ball.size
+            pong.ball.x - (pong.ball.size/2),
+            pong.ball.y - (pong.ball.size/2),
+            pong.ball.size,
+            pong.ball.size
         );
     }
 
@@ -48,43 +48,43 @@ function PongClient(context, socket, cursors_context) {
         ctx.fillRect(
             pong.settings.width/2-pc.midline_width/2,
             0,
-            pc.midline_width,
+            pong.midline_width,
             pong.settings.height
         );
 
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(
-            pc.padding,
-            pc.paddle.left - (pc.paddle.height/2),
-            pc.paddle.width,
-            pc.paddle.height
+            pong.padding,
+            pong.paddle.left - (pong.paddle.height/2),
+            pong.paddle.width,
+            pong.paddle.height
         );
         ctx.fillRect(
-            pong.settings.width - pc.padding - pc.paddle.width,
-            pc.paddle.right - (pc.paddle.height/2),
-            pc.paddle.width,
-            pc.paddle.height
+            pong.settings.width - pong.padding - pong.paddle.width,
+            pong.paddle.right - (pong.paddle.height/2),
+            pong.paddle.width,
+            pong.paddle.height
         );
 
         if(pc.frame < 60) {
-            console.log(pc.frame, pc.ball);
+            //console.log(pc.frame, pong.ball);
             pc.frame++
         }
-        pc.predict_ball();
+        pong.calculate_ball();
         pc.draw_ball();
 
         var cctx = pc.cursors_context;
-        cctx.clearRect(0, 0, cpong.settings.width, cpong.settings.height);
+        cctx.clearRect(0, 0, cctx.width, cctx.height);
         var o = pc.canvas_offset;
 
         cctx.fillStyle = "#ff0000";
-        for(i in pc.teams.left) {
-            var c = pc.teams.left[i];
+        for(i in pong.teams.left) {
+            var c = pong.teams.left[i];
             cctx.fillRect(o.left + c.x, o.top + c.y, 5, 5);
         }
         cctx.fillStyle = "#00ff00";
-        for(i in pc.teams.right) {
-            var c = pc.teams.right[i];
+        for(i in pong.teams.right) {
+            var c = pong.teams.right[i];
             cctx.fillRect(o.left + c.x, o.top + c.y, 5, 5);
         }
 
@@ -92,15 +92,15 @@ function PongClient(context, socket, cursors_context) {
     }
 
     pc.set_ball = function(ball) {
-        pc.ball = ball;
+        pong.ball = ball;
     };
     pc.set_teams = function(teams) {
-        pc.teams = teams;
+        pong.teams = teams;
     };
     pc.set_paddles = function(paddles) {
-        pc.paddle.left = paddles.left;
-        pc.paddle.right = paddles.right;
+        pong.paddle.left = paddles.left;
+        pong.paddle.right = paddles.right;
     };
 
-    return pong;
+    return pc;
 }

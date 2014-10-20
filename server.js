@@ -3,54 +3,11 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
+var pong = require('./pong.js').pong;
 
 app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'index.html'));
 });
-
-
-var pong = function() {
-    var pong = this;
-
-    pong.calculate_ball = function() {
-        var ctx = pong.context;
-
-        var boundary = {
-            left: pong.padding + pong.paddle.width,
-            right: pong.context.width - pong.padding - pong.paddle.width,
-            top: 0,
-            bottom: pong.context.height,
-        }
-
-        if(pong.ball.x - pong.ball.half < boundary.left) {
-            if(pong.ball.y - pong.ball.half > pong.paddle.left - pong.paddle.height/2
-            && pong.ball.y + pong.ball.half < pong.paddle.left + pong.paddle.height/2) {
-                pong.ball.dx = Math.abs(pong.ball.dx);
-            }
-            if(pong.ball.x < 0) {
-                pong.reset_ball();
-            }
-        }
-        if(pong.ball.x + pong.ball.half > boundary.right) {
-            if(pong.ball.y - pong.ball.half > pong.paddle.right - pong.paddle.height/2
-            && pong.ball.y + pong.ball.half < pong.paddle.right + pong.paddle.height/2) {
-                pong.ball.dx = -Math.abs(pong.ball.dx);
-            }
-            if(pong.ball.x > ctx.width) {
-                pong.reset_ball();
-            }
-        }
-        if(pong.ball.y - pong.ball.half < boundary.top || pong.ball.y + pong.ball.half > boundary.bottom) {
-            pong.ball.dy = -pong.ball.dy;
-        }
-
-        pong.ball.x += pong.ball.dx;
-        pong.ball.y += pong.ball.dy;
-
-    }
-    
-    return this;
-}();
 
 setInterval(function(){
     pong.calculate_ball();
