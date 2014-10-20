@@ -11,6 +11,7 @@ function Network() {
         net.game.set_teams(msg);
     });
     net.socket.on('ball', function(msg){
+        console.log(' BALL', msg)
         net.game.set_ball(msg);
     });
 

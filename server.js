@@ -11,45 +11,20 @@ app.get('/', function(req, res){
 
 var pong = function() {
     var pong = this;
-    pong.paddle_left = 0;
-    pong.paddle_right = 120;
 
-    pong.padding = 10;
-    pong.paddle_width = 10;
-    pong.paddle_height = 100;
-
-    pong.midline_width = 4;
-
-    pong.teams = {left: {}, right: {}};
-    pong.context = {
-        height: 400,
-        width: 600,
-    }
-    pong.reset_ball = function() {
-        pong.ball = {
-            x: pong.context.width/2,
-            y: pong.context.height/2,
-            dx: 200,
-            dy: 200,
-            size: 10,
-            half: 5,
-        }
-    }
-    pong.reset_ball();
-
-    pong.draw_ball = function() {
+    pong.calculate_ball = function() {
         var ctx = pong.context;
 
         var boundary = {
-            left: pong.padding + pong.paddle_width,
-            right: pong.context.width - pong.padding - pong.paddle_width,
+            left: pong.padding + pong.paddle.width,
+            right: pong.context.width - pong.padding - pong.paddle.width,
             top: 0,
             bottom: pong.context.height,
         }
 
         if(pong.ball.x - pong.ball.half < boundary.left) {
-            if(pong.ball.y - pong.ball.half > pong.paddle_left - pong.paddle_height/2
-            && pong.ball.y + pong.ball.half < pong.paddle_left + pong.paddle_height/2) {
+            if(pong.ball.y - pong.ball.half > pong.paddle.left - pong.paddle.height/2
+            && pong.ball.y + pong.ball.half < pong.paddle.left + pong.paddle.height/2) {
                 pong.ball.dx = Math.abs(pong.ball.dx);
             }
             if(pong.ball.x < 0) {
@@ -57,8 +32,8 @@ var pong = function() {
             }
         }
         if(pong.ball.x + pong.ball.half > boundary.right) {
-            if(pong.ball.y - pong.ball.half > pong.paddle_right - pong.paddle_height/2
-            && pong.ball.y + pong.ball.half < pong.paddle_right + pong.paddle_height/2) {
+            if(pong.ball.y - pong.ball.half > pong.paddle.right - pong.paddle.height/2
+            && pong.ball.y + pong.ball.half < pong.paddle.right + pong.paddle.height/2) {
                 pong.ball.dx = -Math.abs(pong.ball.dx);
             }
             if(pong.ball.x > ctx.width) {
@@ -69,8 +44,8 @@ var pong = function() {
             pong.ball.dy = -pong.ball.dy;
         }
 
-        pong.ball.x += pong.ball.dx/20;
-        pong.ball.y += pong.ball.dy/20;
+        pong.ball.x += pong.ball.dx;
+        pong.ball.y += pong.ball.dy;
 
     }
     
@@ -78,9 +53,11 @@ var pong = function() {
 }();
 
 setInterval(function(){
-    pong.draw_ball();
+    pong.calculate_ball();
+}, 1000/60);
+setInterval(function(){
     io.sockets.emit('ball', pong.ball);
-}, 50);
+}, 1000);
 
 setInterval(function(){
     io.sockets.emit('teams', pong.teams);
@@ -105,8 +82,8 @@ setInterval(function(){
         right: parseInt(y_right_total/y_right_count),
     }
 
-    pong.paddle_left = paddles.left;
-    pong.paddle_right = paddles.right;
+    pong.paddle.left = paddles.left;
+    pong.paddle.right = paddles.right;
 
     io.sockets.emit('paddles', paddles);
 }, 50);
