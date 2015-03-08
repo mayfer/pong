@@ -1,25 +1,22 @@
-window.requestAnimFrame = (function(){
-    return window.requestAnimationFrame || 
-        window.webkitRequestAnimationFrame || 
-        window.mozRequestAnimationFrame || 
-        window.oRequestAnimationFrame || 
-        window.msRequestAnimationFrame || 
-        function(callback, element){
-            return window.setTimeout(callback, 1000 / 60);
+// This polyfill is adapted from the MIT-licensed
+// https://github.com/underscorediscovery/realtime-multiplayer-in-html5
+
+(function(animframe) {
+    var timestep = 1000/60;
+    animframe.requestAnimationFrame = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : (function() {
+        var lastTimestamp = Date.now(),
+            now,
+            timeout;
+        return function(callback) {
+            now = Date.now();
+            timeout = Math.max(0, timestep - (now - lastTimestamp));
+            lastTimestamp = now + timeout;
+            return setTimeout(function() {
+                callback(now + timeout);
+            }, timeout);
         };
-})();
-window.cancelAnimFrame = (function(){
-    return window.cancelAnimationFrame || 
-        window.cancelRequestAnimationFrame || 
-        window.webkitCancelAnimationFrame || 
-        window.webkitCancelRequestFrame || 
-        window.mozCancelAnimationFrame || 
-        window.mozCancelRequestAnimationFrame || 
-        window.oCancelAnimationFrame || 
-        window.oCancelRequestAnimationFrame || 
-        window.msCancelAnimationFrame || 
-        window.msCancelRequestAnimationFrame || 
-        function(handler){
-            clearTimeout(handler);
-        };
-})();
+    })();
+     
+    animframe.cancelAnimationFrame = typeof cancelAnimationFrame === 'function' ? cancelAnimationFrame : clearTimeout;
+
+})(typeof animframe === 'undefined'? this['animframe']={}: animframe);

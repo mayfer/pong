@@ -20,8 +20,8 @@
     pong.ball = {
         x: pong.settings.width/2,
         y: pong.settings.height/2,
-        dx: 3,
-        dy: 3,
+        dx: 5,
+        dy: 5,
         size: 10,
         half: 5,
     }
@@ -31,13 +31,17 @@
         right: {},
     };
 
+    pong.callbacks = {
+        sync: function() {},
+    };
+
     pong.reset_ball = function() {
         pong.last_timestamp = Date.now();
         pong.ball = {
             x: pong.settings.width/2,
             y: pong.settings.height/2,
-            dx: 3,
-            dy: 3,
+            dx: 1,
+            dy: 1,
             size: 10,
             half: 5,
         }
@@ -54,29 +58,36 @@
         }
 
         if(pong.ball.x - pong.ball.half < boundary.left) {
-            if(pong.ball.y - pong.ball.half > pong.paddles.left - pong.paddles.height/2
-            && pong.ball.y + pong.ball.half < pong.paddles.left + pong.paddles.height/2) {
+            if(pong.ball.y + pong.ball.half > pong.paddles.left - pong.paddles.height/2
+            && pong.ball.y - pong.ball.half < pong.paddles.left + pong.paddles.height/2) {
                 pong.ball.dx = Math.abs(pong.ball.dx);
+                pong.callbacks.sync();
             }
             if(pong.ball.x < 0) {
                 pong.reset_ball();
+                pong.callbacks.sync();
             }
-        }
-        if(pong.ball.x + pong.ball.half > boundary.right) {
-            if(pong.ball.y - pong.ball.half > pong.paddles.right - pong.paddles.height/2
-            && pong.ball.y + pong.ball.half < pong.paddles.right + pong.paddles.height/2) {
+        } else if(pong.ball.x + pong.ball.half > boundary.right) {
+            if(pong.ball.y + pong.ball.half > pong.paddles.right - pong.paddles.height/2
+            && pong.ball.y - pong.ball.half < pong.paddles.right + pong.paddles.height/2) {
                 pong.ball.dx = -Math.abs(pong.ball.dx);
+                pong.callbacks.sync();
             }
             if(pong.ball.x > s.width) {
                 pong.reset_ball();
+                pong.callbacks.sync();
             }
         }
-        if(pong.ball.y - pong.ball.half < boundary.top || pong.ball.y + pong.ball.half > boundary.bottom) {
-            pong.ball.dy = -pong.ball.dy;
+        if(pong.ball.y - pong.ball.half < boundary.top) {
+            pong.ball.dy = Math.abs(pong.ball.dy);
+            pong.callbacks.sync();
+        } else if(pong.ball.y + pong.ball.half > boundary.bottom) {
+            pong.ball.dy = -Math.abs(pong.ball.dy);
+            pong.callbacks.sync();
         }
 
         var current_timestamp = Date.now();
-        var diff = (current_timestamp - pong.last_timestamp) / 50;
+        var diff = (current_timestamp - pong.last_timestamp) / 10;
 
         pong.ball.x += (pong.ball.dx * diff);
         pong.ball.y += (pong.ball.dy * diff);

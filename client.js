@@ -57,8 +57,6 @@ function PongClient(context, pong, socket, cursors_context) {
                 o.left + pong.padding + pong.paddles.width/2,
                 o.top + pong.paddles.left
             );
-            // console.log(o.left + c.x, o.top + c.y);
-            // console.log(o.left + pong.padding, o.top + pong.paddles.left);
             ctx.stroke();
         }
         ctx.strokeStyle = "#00aa00";
@@ -67,8 +65,6 @@ function PongClient(context, pong, socket, cursors_context) {
             ctx.beginPath();
             ctx.moveTo(o.left + c.x, o.top + c.y);
             ctx.lineTo(o.left + pong.settings.width - pong.padding, o.top + pong.paddles.right);
-            // console.log(o.left + c.x, o.top + c.y);
-            // console.log(o.left + pong.padding, o.top + pong.paddles.left);
             ctx.stroke();
         }
     }
@@ -126,7 +122,7 @@ function PongClient(context, pong, socket, cursors_context) {
             cctx.fillRect(o.left + c.x, o.top + c.y, 5, 5);
         }
 
-        window.requestAnimFrame(pc.render);
+        requestAnimationFrame(pc.render);
     }
 
     pc.set_ball = function(ball) {

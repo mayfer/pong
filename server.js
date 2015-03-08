@@ -4,22 +4,30 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 var pong = require('./pong.js').pong;
+var animframe = require('./animframe.js').animframe;
 
 app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-setInterval(function(){
+var render = function() {
     pong.calculate_ball();
-}, 50);
-
-setInterval(function(){
-    io.sockets.emit('ball', pong.ball);
-}, 1000);
+    animframe.requestAnimationFrame(render);
+};
+render();
 
 setInterval(function(){
     io.sockets.emit('teams', pong.teams);
 }, 50);
+
+pong.callbacks.sync = function() {
+    io.sockets.emit('ball', pong.ball);
+    io.sockets.emit('paddles', pong.paddles);
+};
+
+setInterval(function(){
+    pong.callbacks.sync();
+}, 1000);
 
 setInterval(function(){
     var y_left_total = 0;
@@ -46,12 +54,12 @@ setInterval(function(){
     pong.paddles.left = paddles.left;
     pong.paddles.right = paddles.right;
 
-    io.sockets.emit('paddles', paddles);
+    io.sockets.emit('paddles', pong.paddles);
 }, 50);
 
 io.on('connection', function(socket){
     socket.public_id = hash(socket.id);
-    // console.log('connected', socket.id, socket.public_id);
+    console.log('connected', socket.id, socket.public_id);
 
     var team = Math.random() < 0.5;
 
@@ -63,6 +71,9 @@ io.on('connection', function(socket){
         }
     });
 
+    socket.emit('ball', pong.ball);
+    socket.emit('teams', pong.teams);
+
     socket.on('disconnect', function () {
         console.log('disconnected', socket.id, socket.public_id);
         delete pong.teams.left[socket.public_id];
@@ -70,8 +81,9 @@ io.on('connection', function(socket){
     });
 });
 
-http.listen(8002, function(){
-    console.log('listening on *:3000');
+var port = 8002;
+http.listen(port, function(){
+    console.log('listening on *:'+port);
 });
 app.use(express.static(__dirname));
 
